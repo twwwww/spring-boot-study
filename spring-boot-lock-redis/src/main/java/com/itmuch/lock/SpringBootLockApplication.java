@@ -15,26 +15,29 @@ import java.util.concurrent.locks.Lock;
 @SpringBootApplication
 @RestController
 public class SpringBootLockApplication {
-  @Autowired
-  private RedisLockRegistry redisLockRegistry;
+    @Autowired
+    private RedisLockRegistry redisLockRegistry;
 
-  @GetMapping("test")
-  public void test() throws InterruptedException {
-    Lock lock = redisLockRegistry.obtain("lock");
-    boolean b1 = lock.tryLock(3, TimeUnit.SECONDS);
-    log.info("b1 is : {}", b1);
+    /**
+     * @throws InterruptedException
+     */
+    @GetMapping("test")
+    public void test() throws InterruptedException {
+        Lock lock = redisLockRegistry.obtain("lock");
+        boolean b1 = lock.tryLock(3, TimeUnit.SECONDS);
+        log.info("b1 is : {}", b1);
 
-    TimeUnit.SECONDS.sleep(5);
+        TimeUnit.SECONDS.sleep(5);
 
-    boolean b2 = lock.tryLock(3, TimeUnit.SECONDS);
-    log.info("b2 is : {}", b2);
+        boolean b2 = lock.tryLock(3, TimeUnit.SECONDS);
+        log.info("b2 is : {}", b2);
 
-    lock.unlock();
-    lock.unlock();
-  }
+        lock.unlock();
+        lock.unlock();
+    }
 
-  public static void main(String[] args) {
-    SpringApplication.run(SpringBootLockApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootLockApplication.class, args);
+    }
 
 }
